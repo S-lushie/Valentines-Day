@@ -26,4 +26,4 @@ Perfect for sending a sweet message, asking *“Will you be my Valentine?”*, o
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/your-username/valentines-html-app.git
+   https://s-lushie.github.io/Valentines-Day/
