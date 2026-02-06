@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Slot Machine 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffc3e0 50%, #ff1744 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 3px 3px 6px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .slot-machine {
+            background: linear-gradient(145deg, #ff1744, #c2185b);
+            border-radius: 30px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            border: 10px solid #ffd700;
+        }
+
+        .machine-top {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            height: 40px;
+            border-radius: 20px 20px 0 0;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .slots-container {
+            display: flex;
+            gap: 20px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .slot {
+            width: 120px;
+            height: 160px;
+            background: linear-gradient(145deg, #f5f5f5, #ffffff);
+            border: 5px solid #333;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .slot-reel {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            transition: top 0.1s linear;
+        }
+
+        .slot-symbol {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        .lever-container {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .lever {
+            width: 30px;
+            height: 200px;
+            background: linear-gradient(145deg, #8B4513, #A0522D);
+            border-radius: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .lever:hover {
+            transform: scale(1.05);
+        }
+
+        .lever.pulled {
+            transform: translateY(100px);
+        }
+
+        .lever-ball {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle at 30% 30%, #ff1744, #8B0000);
+            border-radius: 50%;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .pull-text {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            white-space: nowrap;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .win-message.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .win-message h2 {
+            color: #ff1744;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .win-message p {
+            color: #666;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hearts-explosion {
+            font-size: 4rem;
+            animation: heartbeat 0.8s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        /* Flying Hearts */
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: float-up 4s ease-in infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle-animation 1s ease-out forwards;
+        }
+
+        @keyframes sparkle-animation {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+
+        /* Music Control */
+        #musicToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #ff1744;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="music/slot-machine.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Win Sound -->
+    <audio id="winSound">
+        <source src="music/win-sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Music Control -->
+    <button id="musicToggle">🎵 Play Music</button>
+
+    <h1>💖 Valentine's Slot Machine 💖</h1>
+    <p class="subtitle">Pull the lever and win my heart! ❤️</p>
+
+    <div class="slot-machine">
+        <div class="machine-top"></div>
+        
+        <div class="slots-container">
+            <div class="slot" id="slot1">
+                <div class="slot-reel" id="reel1"></div>
+            </div>
+            <div class="slot" id="slot2">
+                <div class="slot-reel" id="reel2"></div>
+            </div>
+            <div class="slot" id="slot3">
+                <div class="slot-reel" id="reel3"></div>
+            </div>
+        </div>
+
+        <div class="lever-container">
+            <div class="lever" id="lever">
+                <div class="lever-ball"></div>
+            </div>
+            <div class="pull-text">PULL ME! ⬇</div>
+        </div>
+    </div>
+
+    <div class="win-message" id="winMessage">
+        <div class="hearts-explosion">❤️ 💕 💖</div>
+        <h2>JACKPOT! 🎰</h2>
+        <p>You won my heart!</p>
+        <p style="font-size: 1.2rem;">Taking you to our special day...</p>
+    </div>
+
+    <script>
+        const symbols = ['❤️', '💕', '💖', '🌹', '💝', '💐', '🎀', '💘'];
+        const reels = [
+            document.getElementById('reel1'),
+            document.getElementById('reel2'),
+            document.getElementById('reel3')
+        ];
+        const lever = document.getElementById('lever');
+        const winMessage = document.getElementById('winMessage');
+        const bgMusic = document.getElementById('bgMusic');
+        const winSound = document.getElementById('winSound');
+        const musicToggle = document.getElementById('musicToggle');
+        let isSpinning = false;
+        let isPlaying = false;
+        let attempts = 0; // Track number of attempts
+
+        // Music controls
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicToggle.innerHTML = '🎵 Play Music';
+                isPlaying = false;
+            } else {
+                bgMusic.play();
+                musicToggle.innerHTML = '🔇 Mute Music';
+                isPlaying = true;
+            }
+        });
+
+        // Initialize reels with symbols
+        function initializeReels() {
+            reels.forEach(reel => {
+                reel.innerHTML = '';
+                // Create many symbols for spinning effect
+                for (let i = 0; i < 50; i++) {
+                    const symbol = document.createElement('div');
+                    symbol.className = 'slot-symbol';
+                    symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    reel.appendChild(symbol);
+                }
+            });
+        }
+
+        // Spin the reels
+        function spinReels() {
+            if (isSpinning) return;
+            isSpinning = true;
+            attempts++; // Increment attempts
+
+            // Pull lever animation
+            lever.classList.add('pulled');
+            setTimeout(() => lever.classList.remove('pulled'), 300);
+
+            // Determine what symbols to show based on attempt number
+            let targetSymbols;
+            if (attempts < 3) {
+                // First two attempts: random mismatch
+                targetSymbols = getRandomMismatch();
+            } else {
+                // Third attempt: all hearts!
+                targetSymbols = ['❤️', '❤️', '❤️'];
+            }
+
+            // Spin each reel
+            reels.forEach((reel, index) => {
+                let position = 0;
+                const spinInterval = setInterval(() => {
+                    position -= 160; // Move by one symbol height
+                    reel.style.top = position + 'px';
+                }, 50);
+
+                // Stop spinning after different times for each reel
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    
+                    // Find the target symbol and position it
+                    const targetSymbol = targetSymbols[index];
+                    const symbolIndex = Array.from(reel.children).findIndex(
+                        child => child.textContent === targetSymbol
+                    );
+                    
+                    if (symbolIndex !== -1) {
+                        const finalPosition = -(symbolIndex * 160);
+                        reel.style.top = finalPosition + 'px';
+                        reel.style.transition = 'top 0.5s ease-out';
+                    }
+
+                    // After last reel stops, check result
+                    if (index === 2) {
+                        setTimeout(() => {
+                            checkResult(targetSymbols);
+                        }, 600);
+                    }
+                }, 1000 + (index * 500)); // Each reel stops at different times
+            });
+        }
+
+        // Get random mismatched symbols
+        function getRandomMismatch() {
+            const possibleSymbols = ['💕', '💖', '🌹', '💝', '💐', '🎀', '💘'];
+            let symbol1, symbol2, symbol3;
+            
+            // Ensure they don't all match
+            do {
+                symbol1 = possibleSymbols[Math.floor(Math.random() * possibleSymbols.length)];
+                symbol2 = possibleSymbols[Math.floor(Math.random() * possibleSymbols.length)];
+                symbol3 = possibleSymbols[Math.floor(Math.random() * possibleSymbols.length)];
+            } while (symbol1 === symbol2 && symbol2 === symbol3);
+            
+            return [symbol1, symbol2, symbol3];
+        }
+
+        // Check the result and show appropriate message
+        function checkResult(symbols) {
+            isSpinning = false;
+            
+            if (attempts === 1) {
+                // First attempt - show "Try Again!"
+                showTryAgainMessage("Try Again Babe! 💪");
+            } else if (attempts === 2) {
+                // Second attempt - show "Try Again!"
+                showTryAgainMessage("Keep Going Azmina! 🎯");
+            } else if (attempts >= 3) {
+                // Third attempt - show "Third Time's the Charm!" and win
+                showWinMessage();
+            }
+        }
+
+        // Show try again message
+        function showTryAgainMessage(message) {
+            const tryAgainMsg = document.createElement('div');
+            tryAgainMsg.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                padding: 2rem 3rem;
+                border-radius: 20px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 999;
+                font-size: 2rem;
+                font-weight: bold;
+                color: #ff1744;
+                animation: popIn 0.3s ease-out;
+            `;
+            tryAgainMsg.textContent = message;
+            document.body.appendChild(tryAgainMsg);
+
+            // Add pop-in animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes popIn {
+                    0% { transform: translate(-50%, -50%) scale(0); }
+                    50% { transform: translate(-50%, -50%) scale(1.1); }
+                    100% { transform: translate(-50%, -50%) scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Remove message after 1.5 seconds
+            setTimeout(() => {
+                tryAgainMsg.style.animation = 'popIn 0.2s ease-in reverse';
+                setTimeout(() => {
+                    tryAgainMsg.remove();
+                    style.remove();
+                }, 200);
+            }, 1500);
+        }
+
+        // Show win message and redirect
+        function showWinMessage() {
+            // Update win message to show "Third Time's the Charm!"
+            const winMessageTitle = winMessage.querySelector('h2');
+            const originalText = winMessageTitle.textContent;
+            winMessageTitle.textContent = "Third Time's the Charm! ✨";
+            
+            // Create sparkles
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => createSparkle(), i * 50);
+            }
+
+            // Create hearts explosion
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createHeart(), i * 100);
+            }
+
+            // Play win sound
+            winSound.play().catch(e => console.log('Sound play prevented'));
+
+            // Show win message
+            setTimeout(() => {
+                winMessage.classList.add('show');
+                // Change back to JACKPOT after 1 second
+                setTimeout(() => {
+                    winMessageTitle.textContent = originalText;
+                }, 1000);
+            }, 500);
+
+            // Redirect to celebration page
+            setTimeout(() => {
+                window.location.href = 'celebration.html';
+            }, 6000);
+        }
+
+        // Create floating heart
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            const hearts = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        // Create sparkle effect
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = '50%';
+            sparkle.style.top = '50%';
+            sparkle.style.setProperty('--tx', (Math.random() - 0.5) * 400 + 'px');
+            sparkle.style.setProperty('--ty', (Math.random() - 0.5) * 400 + 'px');
+            document.body.appendChild(sparkle);
+
+            setTimeout(() => sparkle.remove(), 1000);
+        }
+
+        // Continuous background hearts
+        function createBackgroundHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = Math.random() > 0.5 ? '❤️' : '💕';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 8000);
+        }
+
+        // Lever click event
+        lever.addEventListener('click', spinReels);
+
+        // Initialize
+        initializeReels();
+        setInterval(createBackgroundHeart, 500);
+
+        // Auto-play music on first interaction
+        document.addEventListener('click', () => {
+            if (!isPlaying) {
+                bgMusic.play().catch(e => console.log('Audio autoplay prevented'));
+                musicToggle.innerHTML = '🔇 Mute Music';
+                isPlaying = true;
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Valentine's Day! 🐱💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffc3e0 50%, #ff1744 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .itinerary {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .itinerary-item {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .itinerary-item:nth-child(1) { animation-delay: 0.2s; }
+        .itinerary-item:nth-child(2) { animation-delay: 0.4s; }
+        .itinerary-item:nth-child(3) { animation-delay: 0.6s; }
+        .itinerary-item:nth-child(4) { animation-delay: 0.8s; }
+        .itinerary-item:nth-child(5) { animation-delay: 1s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .time {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff1744, #ff6b9d);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .itinerary-item h2 {
+            color: #ff1744;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .itinerary-item p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Dancing Cats */
+        .cat-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .dancing-cat {
+            position: absolute;
+            font-size: 4rem;
+            animation: dance 1s ease-in-out infinite;
+            bottom: 0;
+        }
+
+        .dancing-cat:nth-child(1) {
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .dancing-cat:nth-child(2) {
+            left: 25%;
+            animation-delay: 0.2s;
+        }
+
+        .dancing-cat:nth-child(3) {
+            left: 45%;
+            animation-delay: 0.4s;
+        }
+
+        .dancing-cat:nth-child(4) {
+            left: 65%;
+            animation-delay: 0.6s;
+        }
+
+        .dancing-cat:nth-child(5) {
+            left: 85%;
+            animation-delay: 0.8s;
+        }
+
+        @keyframes dance {
+            0%, 100% {
+                transform: translateY(0) rotate(-5deg);
+            }
+            25% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+            50% {
+                transform: translateY(0) rotate(-5deg) scaleX(-1);
+            }
+            75% {
+                transform: translateY(-30px) rotate(5deg) scaleX(-1);
+            }
+        }
+
+        /* Floating hearts in background */
+        .heart {
+            position: fixed;
+            font-size: 1.5rem;
+            animation: float-up 8s ease-in infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff1744;
+            animation: fall 3s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* Popup Overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .popup-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .popup-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 500px;
+            animation: popIn 0.4s ease-out;
+            position: relative;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .popup-box h2 {
+            color: #ff1744;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-box p {
+            color: #666;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .popup-question {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff1744;
+            margin-bottom: 2rem;
+        }
+
+        .popup-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 1rem 3rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn {
+            background: linear-gradient(45deg, #ff1744, #ff6b9d);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(255, 23, 68, 0.4);
+        }
+
+        .no-btn {
+            background: white;
+            color: #666;
+            border: 3px solid #ccc;
+        }
+
+        .no-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .final-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .final-message.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .final-message h2 {
+            color: #ff1744;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .final-message .big-hearts {
+            font-size: 5rem;
+            animation: heartbeat 1s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="music/win-sound.mp3" type="audio/mpeg">
+        <source src="music/win-sound.ogg" type="audio/ogg">
+    </audio>
+    
+    <!-- Music Control Button -->
+    <button id="musicToggle" style="position: fixed; top: 20px; right: 20px; z-index: 1001; padding: 10px 20px; background: white; border: 2px solid #ff1744; border-radius: 25px; cursor: pointer; font-size: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        🔇 Mute Music
+    </button>
+
+    <div class="header">
+        <h1>🎉 Our Perfect Valentine's Day! 💕</h1>
+        <p>Let's make this day unforgettable together! 🐱</p>
+    </div>
+
+    <div class="itinerary">
+        <div class="itinerary-item">
+            <span class="time">⏰ 10:00 AM</span>
+            <h2>🌅 Breakfast in Bed</h2>
+            <p>Start our day with pancakes, strawberries, and lots of cuddles. Just like cats lounging in the morning sun! 🥞☕</p>
+        </div>
+
+        <div class="itinerary-item">
+            <span class="time">⏰ 12:00 PM</span>
+            <h2>🎨 Creative Time Together</h2>
+            <p>Let's paint, draw, or make something special together. We'll create memories as unique as cat paw prints! 🎨✨</p>
+        </div>
+
+        <div class="itinerary-item">
+            <span class="time">⏰ 2:00 PM</span>
+            <h2>🌳 Romantic Walk</h2>
+            <p>A peaceful stroll through the park, hand in hand. We'll explore like curious cats discovering new territory! 🌸🚶</p>
+        </div>
+
+        <div class="itinerary-item">
+            <span class="time">⏰ 6:00 PM</span>
+            <h2>🍝 Candlelit Dinner</h2>
+            <p>A cozy dinner for two with your favorite foods. Fancy and fun, with no judgment if we're as messy as kittens! 🕯️🍷</p>
+        </div>
+
+        <div class="itinerary-item">
+            <span class="time">⏰ 8:00 PM</span>
+            <h2>🎬 Movie & Snuggle Time</h2>
+            <p>End the perfect day curled up together watching our favorite movies. Just like cats, we'll purr with contentment! 🍿💕</p>
+        </div>
+    </div>
+
+    <!-- Dancing Cats -->
+    <div class="cat-container">
+        <div class="dancing-cat">🐱</div>
+        <div class="dancing-cat">😺</div>
+        <div class="dancing-cat">😸</div>
+        <div class="dancing-cat">😻</div>
+        <div class="dancing-cat">🐱</div>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-box">
+            <h2>💕 One More Question... 💕</h2>
+            <p>You've seen our perfect day together!</p>
+            <p class="popup-question">Will you be my Valentine? ❤️</p>
+            <div class="popup-buttons">
+                <button class="popup-btn yes-btn" id="yesPopupBtn">YES! 💖</button>
+                <button class="popup-btn no-btn" id="noPopupBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Message -->
+    <div class="final-message" id="finalMessage">
+        <div class="big-hearts">💖💕💗</div>
+        <h2>You've Made Me the Happiest! 🎉</h2>
+        <p style="font-size: 1.5rem; color: #666;">I can't wait for our Valentine's Day together!</p>
+    </div>
+
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        let isPlaying = true;
+
+        // Music toggle functionality
+        musicToggle.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicToggle.innerHTML = '🎵 Play Music';
+                isPlaying = false;
+            } else {
+                bgMusic.play();
+                musicToggle.innerHTML = '🔇 Mute Music';
+                isPlaying = true;
+            }
+        });
+
+        // Attempt to autoplay
+        bgMusic.play().catch(e => {
+            console.log('Audio autoplay prevented, user interaction required');
+            musicToggle.innerHTML = '🎵 Play Music';
+            isPlaying = false;
+        });
+
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            const hearts = ['❤️', '💕', '💖', '💗', '💓'];
+            heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDelay = Math.random() * 2 + 's';
+            heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        // Create confetti
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            const colors = ['#ff1744', '#ff6b9d', '#ffc3e0', '#fff', '#ffeb3b'];
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.top = '-10px';
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(confetti);
+
+            setTimeout(() => {
+                confetti.remove();
+            }, 5000);
+        }
+
+        // Continuously create hearts and confetti
+        setInterval(createHeart, 400);
+        setInterval(createConfetti, 200);
+
+        // Add extra dancing effect to cats on click
+        document.querySelectorAll('.dancing-cat').forEach(cat => {
+            cat.addEventListener('click', function() {
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = '';
+                }, 10);
+            });
+        });
+
+        // Scroll detection for popup
+        const popupOverlay = document.getElementById('popupOverlay');
+        const yesPopupBtn = document.getElementById('yesPopupBtn');
+        const noPopupBtn = document.getElementById('noPopupBtn');
+        const finalMessage = document.getElementById('finalMessage');
+        let popupShown = false;
+
+        // Check if user scrolled to bottom
+        window.addEventListener('scroll', () => {
+            if (popupShown) return;
+
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+
+            // If scrolled to within 100px of bottom
+            if (scrollTop + clientHeight >= scrollHeight - 100) {
+                popupShown = true;
+                setTimeout(() => {
+                    popupOverlay.classList.add('show');
+                }, 500);
+            }
+        });
+
+        // Yes button click
+        yesPopupBtn.addEventListener('click', () => {
+            popupOverlay.classList.remove('show');
+            
+            // Create massive hearts explosion
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => createHeart(), i * 50);
+            }
+            
+            // Show final message
+            setTimeout(() => {
+                finalMessage.classList.add('show');
+            }, 500);
+        });
+
+        // No button click - make it shrink and become harder to click
+        let noClickCount = 0;
+        noPopupBtn.addEventListener('mouseover', () => {
+            noClickCount++;
+            const newSize = Math.max(0.3, 1 - (noClickCount * 0.15));
+            noPopupBtn.style.transform = `scale(${newSize})`;
+            
+            // Make yes button bigger
+            const yesSize = 1 + (noClickCount * 0.1);
+            yesPopupBtn.style.transform = `scale(${yesSize})`;
+            
+            // Hide no button after 4 hovers
+            if (noClickCount >= 4) {
+                noPopupBtn.style.display = 'none';
+            }
+        });
+
+        noPopupBtn.addEventListener('click', () => {
+            alert("Aww, are you sure? Maybe try the other button? 😊");
+        });
+    </script>
+</body>
+</html>
